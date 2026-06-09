@@ -1,0 +1,93 @@
+{
+    "image_path": "100_18/visualization.png",
+    "image_type": "oct",
+    "image_description": "",
+    "annotations": {
+        "bounding_boxes": [
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.3926,
+                        0.3145
+                    ],
+                    "bottom_right": [
+                        0.5781,
+                        0.4883
+                    ]
+                },
+                "region_type": "mh",
+                "annotation_ID": 1,
+                "color": "dark_olive_green"
+            },
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.0,
+                        0.1875
+                    ],
+                    "bottom_right": [
+                        0.998,
+                        0.5234
+                    ]
+                },
+                "region_type": "retina",
+                "annotation_ID": 2,
+                "color": "sky_blue"
+            },
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.0,
+                        0.3184
+                    ],
+                    "bottom_right": [
+                        0.9961,
+                        0.5645
+                    ]
+                },
+                "region_type": "choroid",
+                "annotation_ID": 3,
+                "color": "spring_green"
+            }
+        ],
+        "segmentations": [
+            {
+                "ID": "segm_3",
+                "segmentation_class": "mh",
+                "segmentation_path": "segmentations/segm_3_mh.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_1",
+                "segmentation_class": "irc",
+                "segmentation_path": "segmentations/segm_1_irc.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_2",
+                "segmentation_class": "retina",
+                "segmentation_path": "segmentations/segm_2_retina.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_4",
+                "segmentation_class": "choroid",
+                "segmentation_path": "segmentations/segm_4_choroid.png",
+                "segmentation_color": "red"
+            }
+        ]
+    },
+    "metadata": {
+        "dataset_id": "oimhs",
+        "patient_id": 97,
+        "eye_side": "left eye",
+        "patient_age": 76,
+        "patient_sex": "female",
+        "stage_of_macular_hole_decision": 4,
+        "image_quality": {
+            "low_signal_strength": 0,
+            "signal_shield": 0,
+            "image_blur": 0
+        }
+    }
+}

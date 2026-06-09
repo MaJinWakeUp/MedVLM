@@ -1,0 +1,55 @@
+{
+    "image_path": "V0026/visualization.png",
+    "image_type": "Fundus RGB Images",
+    "image_description": "",
+    "annotations": {
+        "bounding_boxes": [
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.24724602203182375,
+                        0.3990208078335373
+                    ],
+                    "bottom_right": [
+                        0.3873929008567931,
+                        0.555079559363525
+                    ]
+                },
+                "region_type": "Optic Disc",
+                "annotation_ID": 1,
+                "color": "yellow"
+            },
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.27600979192166464,
+                        0.423500611995104
+                    ],
+                    "bottom_right": [
+                        0.36474908200734396,
+                        0.5244798041615667
+                    ]
+                },
+                "region_type": "Optic Cup",
+                "annotation_ID": 2,
+                "color": "pink"
+            }
+        ],
+        "segmentations": [
+            {
+                "ID": "segm_1",
+                "region_type": "optic disc",
+                "segmentation_path": "segmentations/segm_1_optic_disc.png"
+            },
+            {
+                "ID": "segm_2",
+                "region_type": "optic cup",
+                "segmentation_path": "segmentations/segm_2_optic_cup.png"
+            }
+        ]
+    },
+    "metadata": {
+        "dataset_id": "Refuge Dataset",
+        "glaucoma_label": "Glaucoma"
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "image_path": "28_13/visualization.png",
+    "image_type": "oct",
+    "image_description": "",
+    "annotations": {
+        "bounding_boxes": [
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.0,
+                        0.4902
+                    ],
+                    "bottom_right": [
+                        1.0,
+                        0.6406
+                    ]
+                },
+                "region_type": "choroid",
+                "annotation_ID": 1,
+                "color": "red"
+            },
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.5137,
+                        0.3262
+                    ],
+                    "bottom_right": [
+                        0.6582,
+                        0.4082
+                    ]
+                },
+                "region_type": "mh",
+                "annotation_ID": 2,
+                "color": "red"
+            },
+            {
+                "bounding_box": {
+                    "top_left": [
+                        0.0,
+                        0.3027
+                    ],
+                    "bottom_right": [
+                        1.0,
+                        0.5273
+                    ]
+                },
+                "region_type": "retina",
+                "annotation_ID": 3,
+                "color": "pink"
+            }
+        ],
+        "segmentations": [
+            {
+                "ID": "segm_3",
+                "segmentation_class": "mh",
+                "segmentation_path": "segmentations/segm_3_mh.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_4",
+                "segmentation_class": "choroid",
+                "segmentation_path": "segmentations/segm_4_choroid.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_2",
+                "segmentation_class": "retina",
+                "segmentation_path": "segmentations/segm_2_retina.png",
+                "segmentation_color": "red"
+            },
+            {
+                "ID": "segm_1",
+                "segmentation_class": "irc",
+                "segmentation_path": "segmentations/segm_1_irc.png",
+                "segmentation_color": "red"
+            }
+        ]
+    },
+    "metadata": {
+        "dataset_id": "oimhs",
+        "patient_id": 27,
+        "eye_side": "left eye",
+        "patient_age": 64,
+        "patient_sex": "male",
+        "stage_of_macular_hole_decision": 2,
+        "image_quality": {
+            "low_signal_strength": 0,
+            "signal_shield": 0,
+            "image_blur": 0
+        }
+    }
+}
