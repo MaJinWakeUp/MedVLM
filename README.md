@@ -8,7 +8,7 @@ An interactive Google Colab notebook demonstrating how large vision-language mod
 
 ## What it does
 
-The notebook runs **InternVL3.5-8B** on 10 curated ophthalmology samples and walks through three clinical tasks:
+The notebook runs **InternVL2-4B** on 10 curated ophthalmology samples and walks through three clinical tasks:
 
 | Task | Description | Data |
 |------|-------------|------|
@@ -24,8 +24,8 @@ Results are compared against paper baselines and specialist-trained CNNs to show
 
 Click the **Open in Colab** badge above — the notebook clones this repo automatically. No setup needed.
 
-> **GPU requirement:** InternVL3.5-8B needs ~16 GB GPU RAM. An **A100 GPU (Colab Pro)** is recommended.
-> Go to **Runtime → Change runtime type → A100 GPU** before running.
+> **GPU requirement:** InternVL2-4B needs ~8 GB GPU RAM. A free **T4 GPU** is sufficient.
+> Go to **Runtime → Change runtime type → T4 GPU** before running.
 
 ---
 
