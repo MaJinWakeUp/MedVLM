@@ -2,10 +2,10 @@
 
 An interactive Google Colab notebook demonstrating how large vision-language models tackle real ophthalmology tasks, built around the [LMOD benchmark](https://arxiv.org/abs/2410.01620) (Qin et al., 2025).
 
-| Notebook | Purpose | Data Source | Link |
-|---|---|---|---|
-| **Quick Demo** (`colab_demo.ipynb`) | Interactive 10-sample walkthrough | Cloned from GitHub (No Drive needed) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_demo.ipynb) |
-| **Full Dataset Benchmark** (`colab_full_dataset_inference.ipynb`) | Full-scale inference, metrics & evaluation | Mounted from Google Drive (`Datasets/LMOD`) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_full_dataset_inference.ipynb) |
+| Notebook | Purpose | Data Source |
+|---|---|---|
+| **Quick Demo**<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_demo.ipynb)<br>[`colab_demo.ipynb`](colab_demo.ipynb) | Interactive 10-sample walkthrough | Cloned from GitHub (No Drive needed) |
+| **Full Dataset Benchmark**<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_full_dataset_inference.ipynb)<br>[`colab_full_dataset_inference.ipynb`](colab_full_dataset_inference.ipynb) | Full-scale batch inference, metrics & evaluation | Mounted from Google Drive (`Datasets/LMOD`) |
 
 ---
 
