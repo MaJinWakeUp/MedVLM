@@ -2,19 +2,25 @@
 
 An interactive Google Colab notebook demonstrating how large vision-language models tackle real ophthalmology tasks, built around the [LMOD benchmark](https://arxiv.org/abs/2410.01620) (Qin et al., 2025).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_demo.ipynb)
+| Notebook | Purpose | Data Source | Link |
+|---|---|---|---|
+| **Quick Demo** (`colab_demo.ipynb`) | Interactive 10-sample walkthrough | Cloned from GitHub (No Drive needed) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_demo.ipynb) |
+| **Full Dataset Benchmark** (`colab_full_dataset_inference.ipynb`) | Full-scale inference, metrics & evaluation | Mounted from Google Drive (`Datasets/LMOD`) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MaJinWakeUp/MedVLM/blob/main/colab_full_dataset_inference.ipynb) |
 
 ---
 
 ## What it does
 
-The notebook runs **InternVL2-4B** on 10 curated ophthalmology samples and walks through three clinical tasks:
+The repository provides two notebooks:
+1. **Interactive Demo (`colab_demo.ipynb`)**: Runs **InternVL2-4B** on 10 curated ophthalmology samples.
+2. **Full Dataset Benchmark (`colab_full_dataset_inference.ipynb`)**: Mounts the dataset from Google Drive (`Datasets/LMOD`), extracts to high-speed local disk, performs batch inference with auto-checkpointing on all dataset parts supporting **both Anatomical Recognition and Diagnosis Analysis**, and exports all results back to Drive.
 
-| Task | Description | Data |
-|------|-------------|------|
-| **Anatomical Recognition** | Label numbered bounding boxes in a retinal cross-section | 5 OCT scans (OIMHS dataset) |
-| **Glaucoma Diagnosis** | Classify a fundus photo as Glaucoma / Non-Glaucoma | 5 color fundus photos (REFUGE dataset) |
-| **Macular Hole Staging** | Grade the severity of a macular hole (Stage 1–4) | Same 5 OCT scans |
+### Dual-Purpose Modalities & Datasets Evaluated:
+
+| Modality | Source Dataset(s) | Sample Count | Anatomical Recognition | Diagnosis Analysis |
+|:---|:---|:---:|:---:|:---|
+| **OCT** | **OIMHS** | **3,859** | `irc`, `retina`, `choroid`, `mh` | **Macular Hole Staging** (Stages 1–4) |
+| **Color Fundus (CFP)** | **REFUGE, ORIGA, G1020, IDRiD** | **3,386** | Optic Disc, Optic Cup, Fovea | **Glaucoma Detection** (REFUGE, ORIGA, G1020) |
 
 Results are compared against paper baselines and specialist-trained CNNs to show the gap between general LVLMs and domain-specific models.
 
@@ -22,9 +28,13 @@ Results are compared against paper baselines and specialist-trained CNNs to show
 
 ## How to run
 
-Click the **Open in Colab** badge above — the notebook clones this repo automatically. No setup needed.
+- **For the Quick Demo**: Click the **Open in Colab** badge for `colab_demo.ipynb`. It automatically clones this repo and runs immediately.
+- **For Full Dataset Inference**:
+  1. Upload your dataset zip file(s) or folders to Google Drive at `Datasets/LMOD`.
+  2. Open `colab_full_dataset_inference.ipynb` in Colab.
+  3. Mount Drive and run the cells. The notebook will automatically unzip the dataset to local SSD, index all OCT and Fundus samples, run batch inference with checkpointing, and export prediction CSVs and plots to `Datasets/LMOD/results/`.
 
-> **GPU requirement:** InternVL2-4B needs ~8 GB GPU RAM. A free **T4 GPU** is sufficient.
+> **GPU requirement:** InternVL2-4B needs ~8 GB GPU RAM. A free **T4 GPU** (or A100/V100) is sufficient.
 > Go to **Runtime → Change runtime type → T4 GPU** before running.
 
 ---
@@ -33,7 +43,8 @@ Click the **Open in Colab** badge above — the notebook clones this repo automa
 
 ```
 MedVLM/
-├── colab_demo.ipynb          ← The notebook (open this in Colab)
+├── colab_demo.ipynb                    ← Quick interactive demo notebook (10 curated samples)
+├── colab_full_dataset_inference.ipynb  ← Full dataset inference & evaluation notebook (Google Drive)
 └── samples/
     ├── OIMHS/                ← 5 OCT scans with macular hole annotations
     │   ├── 35_8/             ← Stage 1
