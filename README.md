@@ -13,7 +13,7 @@ An interactive Google Colab notebook demonstrating how large vision-language mod
 
 The repository provides two notebooks:
 1. **Interactive Demo (`colab_demo.ipynb`)**: Runs **InternVL2-4B** on 10 curated ophthalmology samples.
-2. **Full Dataset Benchmark (`colab_full_dataset_inference.ipynb`)**: Mounts the dataset from Google Drive (`Datasets/LMOD`), extracts to high-speed local disk, performs batch inference with auto-checkpointing on all dataset parts supporting **both Anatomical Recognition and Diagnosis Analysis**, and exports all results back to Drive.
+2. **Full Dataset Benchmark (`colab_full_dataset_inference.ipynb`)**: Multi-model batch inference engine supporting **`OpenGVLab/InternVL3_5-8B`** and **`Qwen/Qwen3.5-9B`** (or `Qwen/Qwen2.5-VL-7B-Instruct`). Mounts the dataset from Google Drive (`Datasets/LMOD`), extracts to high-speed local disk, performs batch inference with auto-checkpointing on all dual-purpose dataset parts, and exports model-tagged results back to Drive.
 
 ### Dual-Purpose Modalities & Datasets Evaluated:
 
@@ -32,10 +32,11 @@ Results are compared against paper baselines and specialist-trained CNNs to show
 - **For Full Dataset Inference**:
   1. Upload your dataset zip file(s) or folders to Google Drive at `Datasets/LMOD`.
   2. Open `colab_full_dataset_inference.ipynb` in Colab.
-  3. Mount Drive and run the cells. The notebook will automatically unzip the dataset to local SSD, index all OCT and Fundus samples, run batch inference with checkpointing, and export prediction CSVs and plots to `Datasets/LMOD/results/`.
+  3. Select your model in Step 2 (`OpenGVLab/InternVL3_5-8B` or `Qwen/Qwen3.5-9B`).
+  4. Mount Drive and run the cells. The notebook will automatically unzip the dataset to local SSD, index samples, run batch inference with model-tagged checkpointing, and export prediction CSVs and plots to `Datasets/LMOD/results/`.
 
-> **GPU requirement:** InternVL2-4B needs ~8 GB GPU RAM. A free **T4 GPU** (or A100/V100) is sufficient.
-> Go to **Runtime → Change runtime type → T4 GPU** before running.
+> **GPU requirement:** `InternVL3_5-8B` and `Qwen3.5-9B` require ~16 GB GPU RAM in bfloat16. A free **T4 GPU** or **A100 / L4 / V100** is recommended.
+> Go to **Runtime → Change runtime type** before running.
 
 ---
 
