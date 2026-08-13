@@ -1,0 +1,11 @@
+accelerate>=1.0
+huggingface-hub>=0.30
+matplotlib>=3.8
+numpy>=1.26
+pandas>=2.2
+Pillow>=10.0
+qwen-vl-utils>=0.0.8
+scikit-learn>=1.4
+seaborn>=0.13
+tqdm>=4.66
+transformers>=4.57

@@ -1,0 +1,8 @@
+matplotlib>=3.8
+numpy>=1.26
+openai>=1.50
+pandas>=2.2
+Pillow>=10.0
+scikit-learn>=1.4
+seaborn>=0.13
+tqdm>=4.66

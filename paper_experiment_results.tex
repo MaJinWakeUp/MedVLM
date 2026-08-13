@@ -1,0 +1,184 @@
+\section{Experimental Setup}
+\label{sec:experiments}
+
+\subsection{Datasets and Tasks}
+
+We evaluated the RCD-hosted \texttt{qwen3.5-9b} model on the anatomical
+recognition and diagnosis tasks derived from LMOD~\cite{qin2025lmod}.  The
+evaluation included 7,245 images: 3,859 optical coherence tomography (OCT)
+images from OIMHS and 3,386 color fundus photographs from REFUGE
+($n=1{,}200$), ORIGA ($n=650$), G1020 ($n=1{,}020$), and IDRiD ($n=516$).
+Across these images, the anatomical recognition task contained 15,938
+reference regions.  The model was shown the bounding-box-annotated image and
+asked to return one anatomical type for each region identifier using the
+format \texttt{Region ID: <ID>; Type: <TYPE>}.
+
+For diagnosis, we evaluated glaucoma detection on all 2,470 fundus images
+with explicit glaucoma labels and macular-hole staging on all 3,859 OIMHS
+images.  The glaucoma set contained 544 glaucoma and 1,926 non-glaucoma
+images.  Its source distribution was 800 REFUGE, 650 ORIGA, and 1,020 G1020
+images.  The macular-hole reference distribution was 19, 610, 1,043, and
+2,187 images for stages 1 through 4, respectively.  We evaluated every
+available reference-labeled example without class balancing or resampling.
+Consequently, the reported glaucoma accuracy should be interpreted together
+with the class distribution and majority-class baseline.
+
+\subsection{Inference Configuration}
+
+We accessed \texttt{qwen3.5-9b} through the Clemson RCD OpenAI-compatible
+multimodal endpoint.  Local images were converted to RGB JPEG at quality 95
+and resized, when necessary, such that the longest side did not exceed 2,048
+pixels.  We used deterministic decoding with temperature 0, requested that
+model thinking be disabled, and allowed at most 1,024 completion tokens.  The
+request timeout was 600 seconds with at most five client retries.  Predictions
+were checkpointed after each request.  Clean images were used for diagnosis,
+whereas annotated images were used for anatomical recognition.
+
+The recognition prompt listed the allowed anatomical categories for the
+corresponding modality.  For diagnosis, glaucoma responses were requested in
+the form \texttt{GLAUCOMA / NON-GLAUCOMA; Explanation: <TEXT>}, and
+macular-hole responses were requested as
+\texttt{Stage: <INTEGER>; Justification: <TEXT>}.  We reparsed the raw model
+responses during evaluation rather than relying on intermediate prediction
+fields.  A macular-hole response was valid only when the explicit
+\texttt{Stage:} field contained an integer from 1 to 4.  This prevented a
+number appearing later in a free-text explanation from being mistaken for the
+predicted stage.
+
+\subsection{Evaluation Metrics}
+
+For anatomical recognition, let $C$ be the number of predicted region
+identifiers whose normalized anatomical type matches the LMOD reference, let
+$N_P$ be the number of unique predicted region identifiers, and let $N_T$ be
+the number of reference region identifiers.  We computed micro-averaged
+precision, recall, and F1 as
+\begin{equation}
+    \mathrm{Precision}=\frac{C}{N_P},\qquad
+    \mathrm{Recall}=\frac{C}{N_T},\qquad
+    \mathrm{F1}=\frac{2\,\mathrm{Precision}\,\mathrm{Recall}}
+    {\mathrm{Precision}+\mathrm{Recall}}.
+\end{equation}
+Following LMOD~\cite{qin2025lmod}, hallucination resistance for image $i$ was
+computed from the predicted identifier set $\mathcal{P}_i$ and reference
+identifier set $\mathcal{T}_i$:
+\begin{equation}
+    \mathrm{HR}_i = 1-
+    \frac{\left|\left\{r\in\mathcal{P}_i:r\notin\mathcal{T}_i\right\}\right|}
+    {|\mathcal{P}_i|}.
+\end{equation}
+We report the macro mean of $\mathrm{HR}_i$ over parseable responses.  HR is
+undefined for an empty predicted set; these cases were instead captured by
+the invalid-response rate.
+
+For glaucoma detection and macular-hole staging, accuracy was the number of
+correct strict-format predictions divided by the total number of
+reference-labeled examples.  Missing and invalid responses therefore counted
+as incorrect.  For each task, invalid-response rate (IR) was
+\begin{equation}
+    \mathrm{IR}=\frac{N_{\mathrm{missing}}+N_{\mathrm{unparseable}}}
+    {N_{\mathrm{reference}}}.
+\end{equation}
+All metrics were computed directly from the saved raw predictions and the
+\texttt{information.json} reference annotations in the extracted LMOD data.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Overall Performance}
+
+Table~\ref{tab:results} summarizes performance across the two tasks.
+Anatomical recognition achieved 64.43\% precision, 63.03\% recall, and a
+63.72\% F1 score.  Of 15,591 parsed region predictions, 10,045 matched both
+the reference identifier and anatomical type.  The model produced only 53
+invented region identifiers, yielding an HR of 99.76\%.  Thus, the main
+recognition errors arose from omitted or incorrectly typed reference regions
+rather than from inventing new identifiers.
+
+The recognition invalid-response rate was 2.40\% (174 of 7,245 images).  This
+total consisted of 131 unparseable outputs and 43 missing prediction records.
+The current recognition checkpoint therefore contains 7,202 of 7,245 expected
+records; missing records are included as invalid and contribute no correct
+regions in the reported metrics.
+
+For glaucoma detection, the model obtained 77.17\% accuracy (1,906 of 2,470)
+with a 0.20\% invalid-response rate.  Accuracy among the 2,465 valid responses
+was 77.32\%.  However, the majority-class baseline obtained by always
+predicting non-glaucoma is 77.98\% on this imbalanced evaluation set.  The
+model predicted non-glaucoma for 2,087 valid images and glaucoma for only 378,
+indicating a strong bias toward the majority class.  Therefore, the apparently
+high glaucoma accuracy does not establish discrimination beyond a trivial
+majority classifier.
+
+Macular-hole staging was substantially more difficult.  Overall accuracy was
+15.39\% (594 of 3,859), and 16.30\% of responses were invalid.  Even after
+excluding the 629 invalid responses, accuracy was only 18.39\% (594 of 3,230),
+below the 25\% uniform-random reference for a four-class task.  Among valid
+outputs, the model predicted stages 1, 2, 3, and 4 for 969, 715, 1,429, and
+117 images, respectively.  This distribution contrasts sharply with the
+reference set, which is dominated by stage 4 ($n=2{,}187$), and helps explain
+the low staging accuracy.
+
+\begin{table*}[t]
+    \centering
+    \caption{Current performance of RCD-hosted \texttt{qwen3.5-9b} on the
+    evaluated LMOD tasks. All values are percentages. Invalid or missing
+    diagnosis responses count as incorrect in accuracy. Recognition HR is
+    averaged over parseable responses.}
+    \label{tab:results}
+    \small
+    \begin{tabular}{lrrrrrrrrr}
+        \toprule
+        & \multicolumn{5}{c}{Anatomical recognition}
+        & \multicolumn{2}{c}{Glaucoma}
+        & \multicolumn{2}{c}{MH staging} \\
+        \cmidrule(lr){2-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}
+        Model & Prec. & Rec. & F1 & HR & IR & Acc. & IR & Acc. & IR \\
+        \midrule
+        \texttt{qwen3.5-9b}
+        & 64.43 & 63.03 & 63.72 & 99.76 & 2.40
+        & 77.17 & 0.20 & 15.39 & 16.30 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\subsection{Recognition Performance by Modality}
+
+Recognition performance varied substantially by modality
+(Table~\ref{tab:recognition_by_modality}).  On the pooled CFP group, comprising
+REFUGE, ORIGA, G1020, and IDRiD, the model achieved 97.37\% F1, compared with
+40.02\% on OIMHS OCT.  The OIMHS subset accounted for 133 of the 174 invalid
+recognition responses and 47 of the 53 invented region identifiers.  Thus, the
+overall recognition score masks a pronounced modality gap: labeled optic-disc,
+optic-cup, and foveal regions in fundus photographs were recognized reliably,
+whereas retinal, choroidal, intraretinal-cyst, and macular-hole regions in OCT
+remained challenging.
+
+\begin{table}[t]
+    \centering
+    \caption{Anatomical recognition performance by imaging modality. CFP
+    pools REFUGE, ORIGA, G1020, and IDRiD. All values are percentages.}
+    \label{tab:recognition_by_modality}
+    \small
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Modality & Prec. & Rec. & F1 & HR & IR \\
+        \midrule
+        OCT (OIMHS) & 40.64 & 39.42 & 40.02 & 99.58 & 3.45 \\
+        CFP (others) & 97.87 & 96.87 & 97.37 & 99.96 & 1.21 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Summary of Findings}
+
+Three findings emerge from the current evaluation.  First, the near-perfect
+HR indicates that \texttt{qwen3.5-9b} generally respected the set of region
+identifiers presented in the prompt, although this did not guarantee correct
+anatomical classification.  Second, recognition performance was highly
+modality dependent, with a 57.35-point F1 gap between OCT and pooled CFP.
+Third, diagnosis remained unreliable: glaucoma
+accuracy did not exceed the majority baseline, and macular-hole staging was
+below the uniform-random reference even when invalid responses were excluded.
+Together, these findings suggest that output-format compliance and resistance
+to identifier hallucination are necessary but insufficient for clinically
+meaningful ophthalmic reasoning.
